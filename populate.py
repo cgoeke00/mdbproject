@@ -11,6 +11,7 @@ redisClient.flushdb()
 neo4jUrl = "bolt://localhost:7687"
 neo4jDriver = GraphDatabase.driver(neo4jUrl, auth=('neo4j', 'password'))
 session = neo4jDriver.session()
+session.run('MATCH (n) DETACH DELETE n')
 
 # The CSV file containing the profile data
 csvFilename = "data.csv"
@@ -73,8 +74,9 @@ def addRelationships():
 
             for follower in followers:
                 # Create Neo relationships
-                session.run('MATCH (u1:User {id: ' + id + '}) MATCH (u2:User {id: ' + follower + '}) MERGE (u1)-[:FOLLOWS]->(u2)')
-                rel_count += 1
+                if follower and follower != '':
+                    session.run('MATCH (u1:User {id: ' + id + '}) MATCH (u2:User {id: ' + follower + '}) MERGE (u1)-[:FOLLOWS]->(u2)')
+                    rel_count += 1
 
                 if rel_count%100 == 0:
                     print(f'Added {rel_count} Relationships.')
@@ -84,7 +86,7 @@ def addRelationships():
 
 def clean_strings(string_list):
     # Remove unwanted characters and filter out empty strings
-    cleaned_list = [s.replace('"', '').replace(']', '').replace(' ', '') for s in string_list if s != '']
+    cleaned_list = [s.replace('"', '').replace(']', '').replace(' ', '').replace('[', '') for s in string_list if s != ''and s != '[']
     return cleaned_list
 
 
