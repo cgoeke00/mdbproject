@@ -78,7 +78,7 @@ def addRelationships():
                     session.run('MATCH (u1:User {id: ' + id + '}) MATCH (u2:User {id: ' + follower + '}) MERGE (u1)-[:FOLLOWS]->(u2)')
                     rel_count += 1
 
-                if rel_count%100 == 0:
+                if rel_count%500 == 0:
                     print(f'Added {rel_count} Relationships.')
 
     print(f'Added {rel_count} relationships.')
