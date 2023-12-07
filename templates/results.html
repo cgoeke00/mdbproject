@@ -6,10 +6,18 @@
     <title>My Flask App</title>
 </head>
 <body>
-    <h1>Similar Users for User ID: {{ user_id }}</h1>
+    <h1>Results for User ID: {{ user_id }}</h1>
+    <h2>Similar Users:</h2>
     <ul>
-        {% for user in data %}
+        {% for user in similarity_data %}
             <li>User ID: {{ user['similarUserId'] }}, Similarity Percentage: {{ user['similarityPercentage'] }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Recommended Users:</h2>
+    <ul>
+        {% for user in recommended_data %}
+            <li>ID: {{ user['commonUser.id'] }}, Screen Name: {{ user['commonUser.screenName'] }}</li>
         {% endfor %}
     </ul>
 </body>
