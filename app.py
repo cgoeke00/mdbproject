@@ -27,7 +27,7 @@ def combined():
         MATCH (source:User {{id: {user_id}}})-[:FOLLOWS]->(follower:User)
         WITH source, COLLECT(follower) AS followers
         MATCH (source)-[similarity:SIMILARITY]-(similarUser:User)
-        RETURN similarUser.id AS similarUserId, similarity.cosineSimilarity AS similarityPercentage
+        RETURN similarUser.id AS similarUserId, similarity.cosineSimilarity*100 AS similarityPercentage
         ORDER BY similarityPercentage DESC
         LIMIT 5;
     """

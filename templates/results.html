@@ -7,10 +7,17 @@
 </head>
 <body>
     <h1>Results for User ID: {{ user_id }}</h1>
+
+    <form action="/results" method="GET">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" placeholder="Enter user ID">
+        <button type="submit">Search</button>
+    </form>
+
     <h2>Similar Users:</h2>
     <ul>
         {% for user in similarity_data %}
-            <li>User ID: {{ user['similarUserId'] }}, Similarity Percentage: {{ user['similarityPercentage'] }}</li>
+            <li>User ID: {{ user['similarUserId'] }}, Similarity Percentage: {{ user['similarityPercentage'] }}%</li>
         {% endfor %}
     </ul>
 
