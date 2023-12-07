@@ -15,7 +15,12 @@ def home():
 
 @app.route('/results')
 def combined():
-    user_id = 16190898  # Replace with the actual user ID
+    # user_id = 16190898  # Replace with the actual user ID
+    # Retrieve the user ID from the form data
+    user_id = request.args.get('user_id', '')
+    if not user_id:
+        # Handle the case where user ID is not provided
+        return "Please enter a user ID."
 
     # Similarity Query
     similarity_query = f"""
