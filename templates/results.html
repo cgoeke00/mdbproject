@@ -3,29 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Flask App</title>
+    <title>User ID Search - Flask Application</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Page Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaeaea;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Container for Content */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Form Styling */
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background: #333;
+            color: #fff;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .profile-pic {
+            width: 50px;  /* Adjust the size as needed */
+            height: 50px; /* Adjust the size as needed */
+            border-radius: 50%; /* Makes the image round */
+            object-fit: cover; /* Ensures the image covers the area */
+        }
+    </style>
 </head>
 <body>
-    <h1>Results for User ID: {{ user_id }}</h1>
+    <div class="header">
+        <h1>User ID Search</h1>
+    </div>
 
-    <form action="/results" method="GET">
-        <label for="user_id">User ID:</label>
-        <input type="text" id="user_id" name="user_id" placeholder="Enter user ID">
-        <button type="submit">Search</button>
-    </form>
+    <div class="container">
+        <h2>Results for User ID: {{ user_id }}</h2>
 
-    <h2>Similar Users:</h2>
-    <ul>
-        {% for user in similarity_data %}
-            <li>User ID: {{ user['similarUserId'] }}, Similarity Percentage: {{ user['similarityPercentage'] }}%</li>
-        {% endfor %}
-    </ul>
+        <form action="/results" method="GET">
+            <label for="user_id">User ID:</label>
+            <input type="text" id="user_id" name="user_id" placeholder="Enter user ID">
+            <button type="submit">Search</button>
+        </form>
 
-    <h2>Recommended Users:</h2>
-    <ul>
-        {% for user in recommended_data %}
-            <li>User ID: {{ user['commonUser.id'] }}, Screen Name: {{ user['commonUser.screenName'] }}</li>
-        {% endfor %}
-    </ul>
+        <h3>Similar Users:</h3>
+        <table>
+            <tr>
+                <th>Profile</th>
+                <th>User ID</th>
+                <th>Similarity Percentage</th>
+            </tr>
+            {% for user in similarity_data %}
+                <tr>
+                    <!-- <td><img src="{{ user['profilePicUrl'] }}" alt="Profile Picture" class="profile-pic"></td> -->
+                    <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
+                    <td>{{ user['similarUserId'] }}</td>
+                    <td>{{ user['similarityPercentage'] }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Recommended Users:</h3>
+        <table>
+            <tr>
+                <th>Profile</th>
+                <th>User ID</th>
+                <th>Screen Name</th>
+            </tr>
+            {% for user in recommended_data %}
+                <tr>
+                    <!-- <td><img src="{{ user['commonUser.profilePicUrl'] }}" alt="Profile Picture" class="profile-pic"></td> -->
+                    <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
+                    <td>{{ user['commonUser.id'] }}</td>
+                    <td>{{ user['commonUser.screenName'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 Flask Application. All rights reserved.</p>
+    </div>
 </body>
 </html>
