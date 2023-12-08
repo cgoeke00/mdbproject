@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User ID Search - Flask Application</title>
     <style>
-        /* Basic Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Page Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #eaeaea;
@@ -21,7 +19,6 @@
             padding: 20px;
         }
 
-        /* Header */
         .header {
             background: #333;
             color: #fff;
@@ -30,7 +27,6 @@
             margin-bottom: 40px;
         }
 
-        /* Container for Content */
         .container {
             max-width: 800px;
             margin: auto;
@@ -40,7 +36,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* Form Styling */
         form {
             margin-bottom: 30px;
         }
@@ -63,7 +58,6 @@
             background-color: #0056b3;
         }
 
-        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -88,7 +82,6 @@
             background-color: #f1f1f1;
         }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding: 20px 0;
@@ -99,12 +92,19 @@
             width: 100%;
         }
         .profile-pic {
-            width: 50px;  /* Adjust the size as needed */
-            height: 50px; /* Adjust the size as needed */
-            border-radius: 50%; /* Makes the image round */
-            object-fit: cover; /* Ensures the image covers the area */
+            width: 50px;  
+            height: 50px; 
+            border-radius: 50%;
+            object-fit: cover; 
         }
     </style>
+        <script>
+            function imgError(image) {
+                image.onerror = "";
+                image.src = "templates/360_F_390533252_4Ps06Cxh5X7ykGOcIJBwA7b6gOoJovAj.jpg"; 
+                return true;
+            }
+        </script>
 </head>
 <body>
     <div class="header">
@@ -129,7 +129,7 @@
             </tr>
             {% for user in similarity_data %}
                 <tr>
-                    <!-- <td><img src="{{ user['profilePicUrl'] }}" alt="Profile Picture" class="profile-pic"></td> -->
+                    <!-- <td><img src="{{ user['profilePicUrl'] }}" alt="Profile Picture" class="profile-pic" onerror="imgError(this);"></td> -->
                     <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
                     <td>{{ user['similarUserId'] }}</td>
                     <td>{{ user['similarityPercentage'] }}%</td>
@@ -146,7 +146,7 @@
             </tr>
             {% for user in recommended_data %}
                 <tr>
-                    <!-- <td><img src="{{ user['commonUser.profilePicUrl'] }}" alt="Profile Picture" class="profile-pic"></td> -->
+                    <!-- <td><img src="{{ user['commonUser.profilePicUrl'] }}" alt="Profile Picture" class="profile-pic" onerror="imgError(this);"></td> -->
                     <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
                     <td>{{ user['commonUser.id'] }}</td>
                     <td>{{ user['commonUser.screenName'] }}</td>
