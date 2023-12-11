@@ -47,6 +47,27 @@ def combined():
     }
 
     # Similarity Query
+    
+    # STEP 1 in Neo4j ***** 
+    # Create a graph projection named 'SimilarUsers' based on the 'FOLLOWS' relationship, considering nodes with the 'User' label.
+    # CALL gds.graph.project('SimilarUsers', ['User'], 'FOLLOWS')  ​
+
+    # STEP 2 in Neo4j ***** 
+    # nodeLabels: Labels of nodes to include in the similarity computation ('User' in this case).
+    # relationshipTypes: Types of relationships to consider ('FOLLOWS' in this case).
+    # topK: The number of top similar nodes to store for each node (5 in this case).
+    # similarityCutoff: The similarity cutoff value to filter out weak similarities (0.2 in this case).
+    # writeRelationshipType: The type of relationship to write to store the similarity information ('SIMILARITY').
+    # writeProperty: The property to write on the relationship to store the similarity value ('cosineSimilarity').
+
+    # CALL gds.nodeSimilarity.write('SimilarUsers', {  ​
+    #     nodeLabels: ['User'],  ​
+    #     relationshipTypes: ['FOLLOWS'],  ​
+    #     topK: 5,  ​
+    #     similarityCutoff: 0.2,  ​
+    #     writeRelationshipType: 'SIMILARITY',  ​
+    #     writeProperty: 'cosineSimilarity'  });  
+
     similarity_query = f"""
         MATCH (source:User {{id: {user_id}}})-[:FOLLOWS]->(follower:User)
         WITH source, COLLECT(follower) AS followers
