@@ -24,11 +24,11 @@ Dataset: (https://www.kaggle.com/datasets/hwassner/TwitterFriends)
 
 # Running Similarity Relationship
 # Similarity Query
-  - In order to the the similarity function correct it is important to run these two queries in Neo4j first
+  - In order to run the the similarity function correctly it is important to run these two queries in Neo4j first...
 
   # STEP 1 in Neo4j ***** 
   - Create a graph projection named 'SimilarUsers' based on the 'FOLLOWS' relationship, considering nodes with the 'User' label.
-  
+
   CALL gds.graph.project('SimilarUsers', ['User'], 'FOLLOWS')  ​
 
   # STEP 2 in Neo4j ***** 
