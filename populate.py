@@ -11,13 +11,13 @@ redisClient.flushdb()
 neo4jUrl = "bolt://localhost:7687"
 neo4jDriver = GraphDatabase.driver(neo4jUrl, auth=('neo4j', 'password'))
 session = neo4jDriver.session()
-session.run('MATCH (n) DETACH DELETE n')
+#session.run('MATCH (n) DETACH DELETE n')
 
 # The CSV file containing the profile data
 csvFilename = "data.csv"
+
 # Track how many file lines we've processed
 processedLines = 0
-
 
 ## This function loops through the
 ## CSV data file and populates Redis
@@ -26,7 +26,6 @@ def populateRedis():
     with open(csvFilename, encoding="utf8") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for data in csv_reader:
-
             id = data['id'];
             user = data['screenName']
             tags = data['tags']
@@ -53,8 +52,7 @@ def populateRedis():
             redisClient.sadd(id, json.dumps(profileObj))
 
             # Create Neo nodes
-            session.run('CREATE (u:User {id: ' + id + '})')
-
+            #session.run('CREATE (u:User {id: ' + id + '})')
 
     print(f'Processed {line_count} lines.')
 
@@ -78,18 +76,16 @@ def addRelationships():
                     session.run('MATCH (u1:User {id: ' + id + '}) MATCH (u2:User {id: ' + follower + '}) MERGE (u1)-[:FOLLOWS]->(u2)')
                     rel_count += 1
 
-                if rel_count%100 == 0:
+                if rel_count%500 == 0:
                     print(f'Added {rel_count} Relationships.')
 
     print(f'Added {rel_count} relationships.')
-
 
 def clean_strings(string_list):
     # Remove unwanted characters and filter out empty strings
     cleaned_list = [s.replace('"', '').replace(']', '').replace(' ', '').replace('[', '') for s in string_list if s != ''and s != '[']
     return cleaned_list
 
-
 populateRedis();
-addRelationships();
+#addRelationships();
 redisClient.quit();

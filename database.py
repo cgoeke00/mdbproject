@@ -12,7 +12,7 @@ class NeoConnection:
     def query(self, query_string):
         with self.driver.session() as session:
             result = session.run(query_string)
-            return result.single()
+            return result.data()
 
 class RedisConnection:
 
