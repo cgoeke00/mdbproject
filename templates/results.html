@@ -113,6 +113,20 @@
 
     <div class="container">
         <h2>Results for User ID: {{ user_id }}</h2>
+        <table>
+            <tr>
+                <th>Profile</th>
+                <th>Name</th>
+                <th>Hashtag</th>
+                <th>User ID</th>
+            </tr>
+                <tr>
+                    <td><img src="{{user_data['pfp']}}" alt="Profile Picture" class="profile-pic"></td>
+                    <td>{{user_data['name']}}</td>
+                    <td>{{user_data['tags']}}</td>
+                    <td>{{ user_data['id'] }}</td>
+                </tr>
+        </table>
 
         <form action="/results" method="GET">
             <label for="user_id">User ID:</label>
@@ -124,15 +138,19 @@
         <table>
             <tr>
                 <th>Profile</th>
+                <th>Name</th>
+                <th>Hashtag</th>
                 <th>User ID</th>
                 <th>Similarity Percentage</th>
             </tr>
             {% for user in similarity_data %}
                 <tr>
                     <!-- <td><img src="{{ user['profilePicUrl'] }}" alt="Profile Picture" class="profile-pic" onerror="imgError(this);"></td> -->
-                    <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
-                    <td>{{ user['similarUserId'] }}</td>
-                    <td>{{ user['similarityPercentage'] }}%</td>
+                    <td><img src="{{user['pfp']}}" alt="Profile Picture" class="profile-pic"></td>
+                    <td>{{user['name']}}</td>
+                    <td>{{user['tags']}}</td>
+                    <td><a href="/results?user_id={{ user['id'] }}">{{ user['id'] }}</a></td>
+                    <td>{{ user['similarity'] }}%</td>
                 </tr>
             {% endfor %}
         </table>
@@ -141,22 +159,20 @@
         <table>
             <tr>
                 <th>Profile</th>
+                <th>Name</th>
+                <th>Hashtag</th>
                 <th>User ID</th>
-                <th>Screen Name</th>
             </tr>
             {% for user in recommended_data %}
                 <tr>
                     <!-- <td><img src="{{ user['commonUser.profilePicUrl'] }}" alt="Profile Picture" class="profile-pic" onerror="imgError(this);"></td> -->
-                    <td><img src="http://pbs.twimg.com/profile_images/3130433918/ef798037facdce67f5e9b59629af756f_normal.jpeg" alt="Profile Picture" class="profile-pic"></td>
-                    <td>{{ user['commonUser.id'] }}</td>
-                    <td>{{ user['commonUser.screenName'] }}</td>
+                    <td><img src="{{user['pfp']}}" alt="Profile Picture" class="profile-pic"></td>
+                    <td>{{user['name']}}</td>
+                    <td>{{user['tags']}}</td>
+                    <td><a href="/results?user_id={{ user['id'] }}">{{ user['id'] }}</a></td>
                 </tr>
             {% endfor %}
         </table>
-    </div>
-
-    <div class="footer">
-        <p>© 2023 Flask Application. All rights reserved.</p>
     </div>
 </body>
 </html>

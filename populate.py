@@ -11,7 +11,7 @@ redisClient.flushdb()
 neo4jUrl = "bolt://localhost:7687"
 neo4jDriver = GraphDatabase.driver(neo4jUrl, auth=('neo4j', 'password'))
 session = neo4jDriver.session()
-session.run('MATCH (n) DETACH DELETE n')
+#session.run('MATCH (n) DETACH DELETE n')
 
 # The CSV file containing the profile data
 csvFilename = "data.csv"
@@ -52,7 +52,7 @@ def populateRedis():
             redisClient.sadd(id, json.dumps(profileObj))
 
             # Create Neo nodes
-            session.run('CREATE (u:User {id: ' + id + '})')
+            #session.run('CREATE (u:User {id: ' + id + '})')
 
     print(f'Processed {line_count} lines.')
 
@@ -87,5 +87,5 @@ def clean_strings(string_list):
     return cleaned_list
 
 populateRedis();
-addRelationships();
+#addRelationships();
 redisClient.quit();
