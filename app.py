@@ -18,16 +18,14 @@ def home():
 
 @app.route('/results')
 def combined():
-    # user_id = 16190898  # Replace with the actual user ID
-    # Retrieve the user ID from the form data
     user_id = request.args.get('user_id', '')
     if not user_id:
-        # Handle the case where user ID is not provided
         return "Please enter a user ID."
-    
-    user_data = client.smembers(user_id)
+
+    # Retrieve original user data from Redis
+    user_data_redis = client.smembers(user_id)
     json_data = []
-    for item in user_data:
+    for item in user_data_redis:
         if isinstance(item, bytes):
             item = item.decode('utf-8')
         try:
@@ -40,7 +38,8 @@ def combined():
     tags = json_data[0].get('tags', [])
     pfp = json_data[0].get('pfp', [])
 
-    user_data={
+    # Original user_data
+    original_user_data = {
         'name': username,
         'tags': tags,
         'pfp': pfp
@@ -67,7 +66,7 @@ def combined():
     #     similarityCutoff: 0.2,  ​
     #     writeRelationshipType: 'SIMILARITY',  ​
     #     writeProperty: 'cosineSimilarity'  });  
-
+    
     similarity_query = f"""
         MATCH (source:User {{id: {user_id}}})-[:FOLLOWS]->(follower:User)
         WITH source, COLLECT(follower) AS followers
@@ -77,7 +76,6 @@ def combined():
         LIMIT 5;
     """
     similarity_data = Neo.query(similarity_query)
-    print(similarity_data)
     similarity_list = []
     for user in similarity_data:
         data = client.smembers(user['similarUserId'])
@@ -94,15 +92,16 @@ def combined():
         username = json_data[0].get('username', [])
         tags = json_data[0].get('tags', [])
         pfp = json_data[0].get('pfp', [])
-        user_data = {
+
+        # Similarity user_data
+        similarity_user_data = {
             'id': user['similarUserId'],
             'name': username,
-            'tags':tags,
+            'tags': tags,
             'pfp': pfp,
             'similarity': user['similarityPercentage']
         }
-        similarity_list.append(user_data)
-
+        similarity_list.append(similarity_user_data)
 
     # Recommended Users Query
     recommended_query = f"""
@@ -130,15 +129,17 @@ def combined():
         username = json_data[0].get('username', [])
         tags = json_data[0].get('tags', [])
         pfp = json_data[0].get('pfp', [])
-        user_data = {
+
+        # Recommended user_data
+        recommended_user_data = {
             'id': user['commonUser.id'],
             'name': username,
-            'tags':tags,
+            'tags': tags,
             'pfp': pfp
         }
-        recommended_list.append(user_data)
+        recommended_list.append(recommended_user_data)
 
-    return render_template('results.html', similarity_data=similarity_list, recommended_data=recommended_list, user_id=user_id, user_data=user_data)
+    return render_template('results.html', similarity_data=similarity_list, recommended_data=recommended_list, user_id=user_id, user_data=original_user_data)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
